@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">FacebookSDKExample</string>
+    <string name="facebook_app_id">100128243969071</string>
+</resources>
