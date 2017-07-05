@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">FacebookSDKExample</string>
+    <string name="app_name">FacebookSDK</string>
     <string name="facebook_app_id">100128243969071</string>
+    <string name="facebook_page_id">912605208889540</string>
 </resources>
