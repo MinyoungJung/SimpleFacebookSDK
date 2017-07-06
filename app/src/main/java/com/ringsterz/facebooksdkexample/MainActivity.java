@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Page에 포스팅 (Community 탭에서 확인가능하다. 데모 시 SANDBOX 끄는 것 잊지 말 것)
+        // Page에 포스팅 (데모 시 SANDBOX 끄는 것 잊지 말 것)
         // https://developers.facebook.com/apps/100128243969071/review-status/
         // 앱 공개로 설정해야 Public 에게도 보인다.
 
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                                     Log.e("FB", "Error fetching JSON");
                                 }
 
-                                adapter = new ArrayAdapter<>(getBaseContext(),
+                                adapter = new ArrayAdapter<>(getApplicationContext(),
                                         android.R.layout.simple_list_item_1);
 
                                 for(int i=0; i<jsonArray.length(); i++){
@@ -152,9 +153,12 @@ public class MainActivity extends AppCompatActivity {
                                 }
 
                                 listView.setAdapter(adapter);
-
-
-
+                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                                        Toast.makeText(getBaseContext(), adapter.getItem(i).toString(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
 
                             }
                         }
@@ -168,4 +172,5 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data); // 콜매니저에 결과 전달
     }
+
 }
