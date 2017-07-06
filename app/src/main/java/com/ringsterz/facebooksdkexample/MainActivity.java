@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,33 +29,33 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
-
 public class MainActivity extends AppCompatActivity {
 
-    private CallbackManager callbackManager;
-    private ArrayAdapter<String> adapter;
+    private CallbackManager mCallbackManager;
+    private ArrayAdapter<String> mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        callbackManager = CallbackManager.Factory.create();
+        mCallbackManager = CallbackManager.Factory.create();
 
         setContentView(R.layout.activity_main);
 
-        final LoginButton loginBtn = (LoginButton) findViewById(R.id.login_button);
         final TextView mTextView = (TextView) findViewById(R.id.text_view);
-        final Button postBtn = (Button) findViewById(R.id.post_button);
-        final Button fetchBtn = (Button) findViewById(R.id.fetch_button);
-        final EditText postContent = (EditText) findViewById(R.id.post_content);
-        final ListView listView = (ListView) findViewById(R.id.listView);
-        loginBtn.setReadPermissions("public_profile");
+        final Button mPostBtn = (Button) findViewById(R.id.post_button);
+        final Button mFetchBtn = (Button) findViewById(R.id.fetch_button);
+        final EditText mPostContent = (EditText) findViewById(R.id.post_content);
+        final ListView mListView = (ListView) findViewById(R.id.listView);
+
+        final LoginButton mLoginBtn = (LoginButton) findViewById(R.id.login_button);
+        mLoginBtn.setReadPermissions("public_profile");
         LoginManager.getInstance().logInWithPublishPermissions(this,
                 Arrays.asList("publish_actions")
         );
 
         // 로그인 콜백 등록
-        loginBtn.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        mLoginBtn.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 AccessToken accessToken = AccessToken.getCurrentAccessToken();
@@ -97,11 +96,11 @@ public class MainActivity extends AppCompatActivity {
         // https://developers.facebook.com/apps/100128243969071/review-status/
         // 앱 공개로 설정해야 Public 에게도 보인다.
 
-        postBtn.setOnClickListener(new View.OnClickListener() {
+        mPostBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Bundle params = new Bundle();
-                params.putString("message", postContent.getText().toString());
+                params.putString("message", mPostContent.getText().toString());
                 /* make the API call */
                 new GraphRequest(
                         AccessToken.getCurrentAccessToken(),
@@ -119,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        fetchBtn.setOnClickListener(new View.OnClickListener() {
+        mFetchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 /* make the API call */
@@ -139,27 +138,20 @@ public class MainActivity extends AppCompatActivity {
                                     Log.e("FB", "Error fetching JSON");
                                 }
 
-                                adapter = new ArrayAdapter<>(getApplicationContext(),
+                                mAdapter = new ArrayAdapter<>(getApplicationContext(),
                                         android.R.layout.simple_list_item_1);
 
                                 for(int i=0; i<jsonArray.length(); i++){
                                     try {
                                         String message = jsonArray.getJSONObject(i).getString("message");
                                         Log.e("FB", message);
-                                        adapter.add(message);
+                                        mAdapter.add(message);
                                     } catch (JSONException je) {
                                         Log.e("FB", "Error fetching JSON");
                                     }
                                 }
 
-                                listView.setAdapter(adapter);
-                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                                        Toast.makeText(getBaseContext(), adapter.getItem(i).toString(), Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-
+                                mListView.setAdapter(mAdapter);
                             }
                         }
                 ).executeAsync();
@@ -170,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data); // 콜매니저에 결과 전달
+        mCallbackManager.onActivityResult(requestCode, resultCode, data); // 콜매니저에 결과 전달
     }
 
 }
