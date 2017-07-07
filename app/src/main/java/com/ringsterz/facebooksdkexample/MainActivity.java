@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private CallbackManager mCallbackManager;
     private ArrayAdapter<String> mAdapter;
+    private AccessToken accessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         mLoginBtn.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                AccessToken accessToken = AccessToken.getCurrentAccessToken();
+                accessToken = AccessToken.getCurrentAccessToken();
 
                 GraphRequest request = GraphRequest.newMeRequest(
                         accessToken,
@@ -103,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 params.putString("message", mPostContent.getText().toString());
                 /* make the API call */
                 new GraphRequest(
-                        AccessToken.getCurrentAccessToken(),
+                        accessToken,
                         "/912605208889540/feed", // 페이지 ID
                         params,
                         HttpMethod.POST,
@@ -123,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 /* make the API call */
                 new GraphRequest(
-                        AccessToken.getCurrentAccessToken(),
+                        accessToken,
                         "/912605208889540/feed",
                         null,
                         HttpMethod.GET,
